@@ -83,6 +83,8 @@ jobs:
             --disable-nls \
             --enable-languages=c,c++ \
             --without-headers \
+            --disable-lto \
+            --disable-server \
             --with-gmp=/opt/homebrew \
             --with-mpfr=/opt/homebrew \
             --with-mpc=/opt/homebrew
