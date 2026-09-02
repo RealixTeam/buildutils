@@ -21,7 +21,7 @@ jobs:
         run: |
           wget https://ftp.gnu.org/gnu/binutils/binutils-2.47.tar.gz
           wget https://ftp.gnu.org/gnu/gcc/gcc-13.2.0/gcc-13.2.0.tar.gz
-          tar -xf binutils-2.47.tar-gz
+          tar -xf binutils-2.47.tar.gz
           tar -xf gcc-13.2.0.tar.gz
 
       - name: Build Binutils (includes ld, objcopy, ar)
@@ -77,7 +77,15 @@ jobs:
       - name: Build GCC
         run: |
           mkdir build-gcc && cd build-gcc
-          ../gcc-13.2.0/configure --target=i686-elf --prefix=$HOME/i686-elf --disable-nls --enable-languages=c,c++ --without-headers --with-static-standard-libraries
+          ../gcc-13.2.0/configure \
+            --target=i686-elf \
+            --prefix=$HOME/i686-elf \
+            --disable-nls \
+            --enable-languages=c,c++ \
+            --without-headers \
+            --with-gmp=/opt/homebrew \
+            --with-mpfr=/opt/homebrew \
+            --with-mpc=/opt/homebrew
           make all-gcc -j$(sysctl -n hw.ncpu)
           make all-target-libgcc -j$(sysctl -n hw.ncpu)
           make install-gcc
