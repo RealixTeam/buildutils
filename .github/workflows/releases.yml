@@ -52,7 +52,11 @@ jobs:
     runs-on: macos-14 # Apple Silicon M1/M2/M3
     steps:
       - name: Install dependencies
-        run: brew install gmp mpfr libmpc bison flex texinfo
+        env:
+          HOMEBREW_NO_REQUIRE_TAP_TRUST: 1
+        run: |
+          brew untap aws/tap || true
+          brew install gmp mpfr libmpc bison flex texinfo
 
       - name: Download & Extract Source
         run: |
