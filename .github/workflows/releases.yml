@@ -75,9 +75,6 @@ jobs:
           make install
 
       - name: Build GCC
-        env:
-          CC: /opt/homebrew/opt/llvm/bin/clang
-          CXX: /opt/homebrew/opt/llvm/bin/clang++
         run: |
           mkdir build-gcc && cd build-gcc
           ../gcc-13.2.0/configure \
@@ -87,10 +84,11 @@ jobs:
             --enable-languages=c,c++ \
             --without-headers \
             --disable-lto \
-            --disable-server \
+            --disable-cxx-tools \
             --with-gmp=/opt/homebrew \
             --with-mpfr=/opt/homebrew \
             --with-mpc=/opt/homebrew
+            
           make all-gcc -j$(sysctl -n hw.ncpu)
           make all-target-libgcc -j$(sysctl -n hw.ncpu)
           make install-gcc
