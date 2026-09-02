@@ -75,6 +75,9 @@ jobs:
           make install
 
       - name: Build GCC
+        env:
+          CC: /opt/homebrew/opt/llvm/bin/clang
+          CXX: /opt/homebrew/opt/llvm/bin/clang++
         run: |
           mkdir build-gcc && cd build-gcc
           ../gcc-13.2.0/configure \
