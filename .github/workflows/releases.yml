@@ -49,61 +49,7 @@ jobs:
         with:
           name: linux-toolchain
           path: i686-elf-tools-linux-x86_64.tar.gz
-
-  build-macos:
-    runs-on: macos-14 # Apple Silicon M1/M2/M3
-    steps:
-      - name: Install dependencies
-        env:
-          HOMEBREW_NO_REQUIRE_TAP_TRUST: 1
-        run: |
-          brew untap aws/tap || true
-          brew install gmp mpfr libmpc bison flex texinfo
-
-      - name: Download & Extract Source
-        run: |
-          curl -O https://ftp.gnu.org/gnu/binutils/binutils-2.47.tar.gz
-          curl -O https://ftp.gnu.org/gnu/gcc/gcc-13.2.0/gcc-13.2.0.tar.gz
-          tar -xf binutils-2.47.tar.gz
-          tar -xf gcc-13.2.0.tar.gz
-
-      - name: Build Binutils
-        run: |
-          mkdir build-binutils && cd build-binutils
-          ../binutils-2.47/configure --target=i686-elf --prefix=$HOME/i686-elf --disable-nls --disable-werror
-          make -j$(sysctl -n hw.ncpu)
-          make install
-
-      - name: Build GCC
-        run: |
-          mkdir build-gcc && cd build-gcc
-          ../gcc-13.2.0/configure \
-            --target=i686-elf \
-            --prefix=$HOME/i686-elf \
-            --disable-nls \
-            --enable-languages=c,c++ \
-            --without-headers \
-            --disable-lto \
-            --disable-cxx-tools \
-            --with-gmp=/opt/homebrew \
-            --with-mpfr=/opt/homebrew \
-            --with-mpc=/opt/homebrew
-            
-          make all-gcc -j$(sysctl -n hw.ncpu)
-          make all-target-libgcc -j$(sysctl -n hw.ncpu)
-          make install-gcc
-          make install-target-libgcc
-
-      - name: Pack Toolchain
-        run: |
-          tar -czvf i686-elf-tools-darwin-arm64.tar.gz -C $HOME i686-elf
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: macos-toolchain
-          path: i686-elf-tools-darwin-arm64.tar.gz
-
+          
   release:
     needs: [build-linux, build-macos]
     runs-on: ubuntu-latest
