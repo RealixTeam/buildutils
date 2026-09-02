@@ -5,11 +5,18 @@ on:
     tags:
       - 'require_buildutils*'
 
+permissions:
+  contents: write
+
 jobs:
   build-linux:
     runs-on: ubuntu-latest
     container: ubuntu:20.04
+
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
       - name: Install dependencies
         run: |
           export DEBIAN_FRONTEND=nointeractive
@@ -44,24 +51,9 @@ jobs:
         run: |
           tar -czvf i686-elf-tools-linux-x86_64.tar.gz -C /opt i686-elf
 
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: linux-toolchain
-          path: i686-elf-tools-linux-x86_64.tar.gz
-          
-  release:
-    needs: [build-linux, build-macos]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download Artifacts
-        uses: actions/download-artifact@v4
-
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
-          files: |
-            linux-toolchain/i686-elf-tools-linux-x86_64.tar.gz
-            macos-toolchain/i686-elf-tools-darwin-arm64.tar.gz
+          files: i686-elf-tools-linux-x86_64.tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
