@@ -21,7 +21,7 @@ jobs:
         run: |
           wget https://ftp.gnu.org/gnu/binutils/binutils-2.47.tar.gz
           wget https://ftp.gnu.org/gnu/gcc/gcc-13.2.0/gcc-13.2.0.tar.gz
-          tar -xf binutils-2.47
+          tar -xf binutils-2.47.tar-gz
           tar -xf gcc-13.2.0.tar.gz
 
       - name: Build Binutils (includes ld, objcopy, ar)
@@ -70,7 +70,7 @@ jobs:
       - name: Build Binutils
         run: |
           mkdir build-binutils && cd build-binutils
-          ../binutils/configure --target=i686-elf --prefix=$HOME/i686-elf --disable-nls --disable-werror
+          ../binutils-2.47/configure --target=i686-elf --prefix=$HOME/i686-elf --disable-nls --disable-werror
           make -j$(sysctl -n hw.ncpu)
           make install
 
