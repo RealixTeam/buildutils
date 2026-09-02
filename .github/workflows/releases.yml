@@ -3,7 +3,7 @@ name: Build Cross Toolchain Release
 on:
   push:
     tags:
-      - 'v*'
+      - 'require_buildutils*'
 
 jobs:
   build-linux:
