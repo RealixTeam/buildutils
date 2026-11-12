@@ -46,10 +46,10 @@ jobs:
 
       - name: Download & Extract Source
         run: |
-          wget -q https://ftp.gnu.org/gnu/binutils/binutils-{BINUTILS_VERSION}.tar.xz
-          wget -q https://ftp.gnu.org/gnu/gcc/gcc-{GCC_VERSION}/gcc-${GCC_VERSION}.tar.xz
-          tar -xf binutils-${BINUTILS_VERSION}.tar.xz
-          tar -xf gcc-${GCC_VERSION}.tar.xz
+          wget --tries=5 --retry-connrefused "https://ftp.gnu.org/gnu/binutils/binutils-${BINUTILS_VERSION}.tar.xz"
+          wget --tries=5 --retry-connrefused "https://ftp.gnu.org/gnu/gcc/gcc-{GCC_VERSION}/gcc-${GCC_VERSION}.tar.xz"
+          tar -xf "binutils-${BINUTILS_VERSION}.tar.xz"
+          tar -xf "gcc-${GCC_VERSION}.tar.xz"
 
       - name: Prepare install prefix
         run: |
